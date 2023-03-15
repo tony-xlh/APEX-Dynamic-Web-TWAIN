@@ -3,7 +3,7 @@ let DWTExtension = {
   DWObject:undefined,
   load: async function(){
     await this.loadLibrary("https://unpkg.com/dwt@18.0.0/dist/dynamsoft.webtwain.min.js","text/javascript");
-    await this.loadStyle("style.css");
+    await this.loadStyle("https://tony-xlh.github.io/APEX-Dynamic-Web-TWAIN/style.css");
     Dynamsoft.DWT.AutoLoad = false;
     Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@18.0.0/dist";
     this.addButton();
@@ -14,7 +14,7 @@ let DWTExtension = {
     const a = document.createElement("a")
     a.href = "javascript:void(0)";
     const icon = document.createElement("img")
-    icon.src = "scanner-scan.svg"
+    icon.src = "https://tony-xlh.github.io/APEX-Dynamic-Web-TWAIN/scanner-scan.svg"
     a.appendChild(icon);
     button.appendChild(a);
     document.body.appendChild(button);
