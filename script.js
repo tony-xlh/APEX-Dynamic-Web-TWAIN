@@ -200,5 +200,3 @@ let DWTExtension = {
     });
   }
 }
-
-DWTExtension.load();
