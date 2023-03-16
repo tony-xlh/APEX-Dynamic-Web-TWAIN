@@ -48,6 +48,10 @@ let DWTExtension = {
     });
   },
   showModal: function(){
+    if (('Dynamsoft' in window) === false) {
+      alert("Please wait for the loading of DWT.");
+      return;
+    }
     if (!this.modal) {
       this.modal = document.createElement("div");
       this.modal.className = "dwt-modal";
