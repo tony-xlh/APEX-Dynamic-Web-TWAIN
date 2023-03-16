@@ -1,12 +1,37 @@
 let DWTExtension = {
   modal:undefined,
   DWObject:undefined,
+  regionID:undefined,
+  img:undefined,
+  width:"100%",
+  height:"100%",
+  init: function(pConfig){
+    this.regionID = pConfig.regionID;
+    this.width = pConfig.width;
+    this.height = pConfig.height;
+    if ('apex' in window) {
+      apex.region.create(
+        pConfig.regionID,
+        {                
+          type: 'Dynamic Web TWAIN',
+          getBase64: function(){
+            DWTExtension.getBase64();
+          },
+          showModal: function() {
+            DWTExtension.showModal();
+          },
+          hideModal: function() {
+            DWTExtension.hideModal();
+          }
+        }
+      );
+    }
+  },
   load: async function(){
     await this.loadLibrary("https://unpkg.com/dwt@18.0.0/dist/dynamsoft.webtwain.min.js","text/javascript");
     await this.loadStyle("https://tony-xlh.github.io/APEX-Dynamic-Web-TWAIN/style.css");
     Dynamsoft.DWT.AutoLoad = false;
     Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@18.0.0/dist";
-    this.addButton();
   },
   addButton: function (){
     const button = document.createElement("div");
@@ -59,6 +84,13 @@ let DWTExtension = {
       copyBtn.addEventListener("click", () => {
         this.copy();
       });
+
+      const useBtn = document.createElement("button");
+      useBtn.innerText = "Use selected";
+      useBtn.addEventListener("click", () => {
+        this.useImage();
+      });
+  
   
       const saveBtn = document.createElement("button");
       saveBtn.innerText = "Save";
@@ -72,6 +104,7 @@ let DWTExtension = {
       controls.appendChild(scanBtn);
       controls.appendChild(editBtn);
       controls.appendChild(copyBtn);
+      controls.appendChild(useBtn);
       controls.appendChild(saveBtn);
       controls.appendChild(status);
   
@@ -137,6 +170,45 @@ let DWTExtension = {
     }, function() {
       alert("Failed");
     });
+  },
+  useImage: function() {
+    if (!this.img) {
+      this.img = document.createElement("img");
+      this.img.setAttribute("width",this.width);
+      this.img.setAttribute("height",this.height);
+      if ('apex' in window) {
+        const region = document.getElementById(this.regionID);
+        region.appendChild(this.img);
+      }else{
+        document.body.appendChild(this.img);
+      }
+    }
+    let success = function (result, indices, type) {
+      const base64 = result.getData(0, result.getLength());
+      DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
+    };
+
+    let error = function (errorCode, errorString) {
+      console.log(errorString);
+    };
+    //1 is B&W, 8 is Gray, 24 is RGB
+    if (this.DWObject.GetImageBitDepth(this.DWObject.CurrentImageIndexInBuffer) == 1) {
+      this.DWObject.ConvertToGrayScale(this.DWObject.CurrentImageIndexInBuffer);
+    }
+      
+    this.DWObject.ConvertToBase64(
+      [this.DWObject.CurrentImageIndexInBuffer],
+      Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
+      success,
+      error
+    );
+  },
+  getBase64: function(){
+    if (this.img) {
+      return this.img.src.replace("data:image/jpeg;base64,","");
+    } else {
+      return "";
+    }
   },
   save: function () {
     if (this.DWObject) {
