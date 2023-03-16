@@ -3,8 +3,8 @@ let DWTExtension = {
   DWObject:undefined,
   regionID:undefined,
   img:undefined,
-  width:"100%",
-  height:"100%",
+  width:undefined,
+  height:undefined,
   init: function(pConfig){
     this.regionID = pConfig.regionID;
     this.width = pConfig.width;
@@ -174,8 +174,13 @@ let DWTExtension = {
   useImage: function() {
     if (!this.img) {
       this.img = document.createElement("img");
-      this.img.setAttribute("width",this.width);
-      this.img.setAttribute("height",this.height);
+      if (this.width) {
+        this.img.style.width = this.width;
+      }
+      if (this.height) {
+        this.img.style.height = this.height;
+      }
+      this.img.style.objectFit = "contain";
       if ('apex' in window) {
         const region = document.getElementById(this.regionID);
         region.appendChild(this.img);
