@@ -34,9 +34,12 @@ let DWTExtension = {
       );
     }
   },
-  load: async function(){
+  load: async function(pConfig){
     await this.loadLibrary("https://unpkg.com/dwt@18.0.0/dist/dynamsoft.webtwain.min.js","text/javascript");
     await this.loadStyle("https://tony-xlh.github.io/APEX-Dynamic-Web-TWAIN/style.css");
+    if (pConfig.license) {
+      Dynamsoft.DWT.ProductKey = pConfig.license;
+    }
     Dynamsoft.DWT.AutoLoad = false;
     Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@18.0.0/dist";
   },
