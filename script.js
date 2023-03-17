@@ -220,7 +220,7 @@ let DWTExtension = {
     if (this.url) {
       url = this.url;
     }else{
-      url = 'https://192.168.8.65:8888/Upload';
+      return;
     }
     let xhr = new XMLHttpRequest();
     let pay_load = {};
@@ -230,12 +230,16 @@ let DWTExtension = {
     xhr.onreadystatechange = function(){
       if(xhr.readyState === 4){
         if (xhr.status==200){
-          const response = JSON.parse(xhr.responseText);
-          if (response["status"] === "success") {
-            DWTExtension.img.setAttribute("data-filename",response["filename"]);
-            //DWTExtension.img.src = "https://192.168.8.65:8888/Get?filename="+encodeURIComponent(response["filename"]);
-            DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
-            alert("uploaded");
+          try {
+            const response = JSON.parse(xhr.responseText);
+            if (response["status"] === "success") {
+              DWTExtension.img.setAttribute("data-filename",response["filename"]);
+              //DWTExtension.img.src = "https://192.168.8.65:8888/Get?filename="+encodeURIComponent(response["filename"]);
+              DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
+              alert("uploaded");
+            }  
+          } catch (error) {
+            console.log(error);
           }
         }else{
           console.log(xhr);
