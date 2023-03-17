@@ -6,6 +6,7 @@ from io import BytesIO
 import base64
 import os
 import time
+import json
 app = Flask(__name__, static_url_path='/', static_folder='./')
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -28,7 +29,7 @@ def upload_file():
             # save file
             out_jpg.save(os.path.join(path,filename))
             response={'status': 'success', 'filename': filename}
-            return response
+            return json.dumps(response)
         
 @app.route('/Get', methods=['GET'])
 def get():
