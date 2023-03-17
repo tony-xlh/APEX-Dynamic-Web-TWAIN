@@ -17,7 +17,7 @@ let DWTExtension = {
         {                
           type: 'Dynamic Web TWAIN',
           getBase64: function(){
-            DWTExtension.getBase64();
+            return DWTExtension.getBase64();
           },
           showModal: function() {
             DWTExtension.showModal();
