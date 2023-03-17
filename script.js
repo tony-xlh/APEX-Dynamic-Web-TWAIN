@@ -193,7 +193,9 @@ let DWTExtension = {
       }
     }
     let success = function (result, indices, type) {
+      console.log("success");
       const base64 = result.getData(0, result.getLength());
+      DWTExtension.upload(base64);
       DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
     };
 
@@ -211,6 +213,22 @@ let DWTExtension = {
       success,
       error
     );
+  },
+  upload: function(base64) {
+    console.log("upload"+base64);
+    $.ajax({
+      url: 'https://192.168.8.65:8888/Upload',
+      type: 'POST',
+      data: {'base64':base64},
+      cache: false,
+      success: function(data) {
+        console.log(data);
+        alert("uploaded");
+      },
+      error: function() {
+        console.log("error");
+      }
+    });
   },
   getBase64: function(){
     if (this.img) {
