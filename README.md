@@ -14,3 +14,17 @@ apex.region("region_id").getFilename(); => get the filename of the uploaded docu
 ```
 
 [Online demo](https://apex.oracle.com/pls/apex/r/dynamsoft/dynamsoft-demos/document-scanner)
+
+Attributes:
+
+* width
+* height
+* host
+* port
+* license
+
+You can apply for a trial license [here](https://www.dynamsoft.com/customer/license/trialLicense?product=dwt).
+
+
+
+
