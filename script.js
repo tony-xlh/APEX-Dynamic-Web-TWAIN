@@ -5,12 +5,14 @@ let DWTExtension = {
   img:undefined,
   width:undefined,
   height:undefined,
-  url:undefined,
+  host:undefined,
+  port:undefined,
   init: function(pConfig){
     this.regionID = pConfig.regionID;
     this.width = pConfig.width;
     this.height = pConfig.height;
-    this.url = pConfig.url;
+    this.host = pConfig.host;
+    this.port = pConfig.port;
     if ('apex' in window) {
       apex.region.create(
         pConfig.regionID,
@@ -198,7 +200,7 @@ let DWTExtension = {
       console.log("success");
       const base64 = result.getData(0, result.getLength());
       DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
-      DWTExtension.upload(base64);
+      DWTExtension.upload();
     };
 
     let error = function (errorCode, errorString) {
@@ -216,38 +218,33 @@ let DWTExtension = {
       error
     );
   },
-  upload: function(base64) {
-    let url;
-    if (this.url) {
-      url = this.url;
-    }else{
+  upload: function() {
+    const server = this.host;
+    const endPoint = "UploadFile"
+    this.DWObject.IfSSL = true; // Set whether SSL is used
+    this.DWObject.HTTPPort = this.port;
+    if (!this.host) {
       return;
     }
-    let xhr = new XMLHttpRequest();
-    let pay_load = {};
-    pay_load["base64"] = base64;
-    xhr.open('POST', url);
-    xhr.setRequestHeader('content-type', 'application/json'); 
-    xhr.onreadystatechange = function(){
-      if(xhr.readyState === 4){
-        if (xhr.status==200){
-          try {
-            const response = JSON.parse(xhr.responseText);
-            if (response["status"] === "success") {
-              DWTExtension.img.setAttribute("data-filename",response["filename"]);
-              //DWTExtension.img.src = "https://192.168.8.65:8888/Get?filename="+encodeURIComponent(response["filename"]);
-              alert("uploaded");
-            }  
-          } catch (error) {
-            console.log(error);
-          }
-        }else{
-          console.log(xhr);
-          alert("error");
-        }
+    let OnEmptyResponse = function(){
+      console.log("empty response");
+    }
+    let OnServerReturnedSomething = function(errorCode, errorString, sHttpResponse){
+      let response = JSON.parse(sHttpResponse);
+      if (response.status === "success") {
+        DWTExtension.img.setAttribute("data-filename",response["filename"]);
+        console.log("Uploaded");
       }
     }
-    xhr.send(JSON.stringify(pay_load));
+    // Upload the image(s) to the server asynchronously    
+    //If the current image is B&W
+    //1 is B&W, 8 is Gray, 24 is RGB
+    if (this.DWObject.GetImageBitDepth(this.DWObject.CurrentImageIndexInBuffer) == 1) {
+      //If so, convert the image to Gray
+      this.DWObject.ConvertToGrayScale(this.DWObject.CurrentImageIndexInBuffer);
+    }
+    //Upload image in JPEG
+    this.DWObject.HTTPUploadThroughPost(server, this.DWObject.CurrentImageIndexInBuffer, endPoint, "scanned.jpg", OnEmptyResponse, OnServerReturnedSomething);
   },
   getBase64: function(){
     if (this.img) {
