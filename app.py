@@ -4,6 +4,8 @@ from PIL import Image
 import base64
 from io import BytesIO
 import base64
+import os
+import time
 app = Flask(__name__, static_url_path='/', static_folder='./')
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
