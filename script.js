@@ -197,6 +197,7 @@ let DWTExtension = {
     let success = function (result, indices, type) {
       console.log("success");
       const base64 = result.getData(0, result.getLength());
+      DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
       DWTExtension.upload(base64);
     };
 
@@ -235,7 +236,6 @@ let DWTExtension = {
             if (response["status"] === "success") {
               DWTExtension.img.setAttribute("data-filename",response["filename"]);
               //DWTExtension.img.src = "https://192.168.8.65:8888/Get?filename="+encodeURIComponent(response["filename"]);
-              DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
               alert("uploaded");
             }  
           } catch (error) {
