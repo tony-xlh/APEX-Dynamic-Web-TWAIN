@@ -18,6 +18,9 @@ let DWTExtension = {
         pConfig.regionID,
         {                
           type: 'Dynamic Web TWAIN',
+          getFilename: function(){
+            return DWTExtension.getFilename();
+          },
           getBase64: function(){
             return DWTExtension.getBase64();
           },
@@ -246,6 +249,13 @@ let DWTExtension = {
     //Upload image in JPEG
     this.DWObject.HTTPUploadThroughPost(server, this.DWObject.CurrentImageIndexInBuffer, endPoint, "scanned.jpg", OnEmptyResponse, OnServerReturnedSomething);
   },
+  getFilename: function(){
+    if (this.img) {
+      return this.img.getAttribute("data-filename");
+    }else{
+      return "";
+    }
+  },
   getBase64: function(){
     if (this.img) {
       return this.img.src.replace("data:image/jpeg;base64,","");
@@ -262,7 +272,6 @@ let DWTExtension = {
     const status = document.querySelector(".dwt-status");
     Dynamsoft.DWT.Containers = [{ ContainerId: 'dwtcontrolContainer',Width: 270, Height: 350 }];
     Dynamsoft.DWT.RegisterEvent('OnWebTwainReady', function () {
-      console.log("ready");
       status.innerText = "";
       DWTExtension.DWObject = Dynamsoft.DWT.GetWebTwain('dwtcontrolContainer');
       DWTExtension.DWObject.Viewer.width = "100%";
