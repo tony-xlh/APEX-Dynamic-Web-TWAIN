@@ -215,11 +215,14 @@ let DWTExtension = {
     );
   },
   upload: function(base64) {
-    console.log("upload"+base64);
+    let data = {'base64':base64};
+    console.log(data);
     $.ajax({
       url: 'https://192.168.8.65:8888/Upload',
       type: 'POST',
-      data: {'base64':base64},
+      data: JSON.stringify(data),
+      contentType: 'application/json;charset=UTF-8',
+      dataType: 'text',
       cache: false,
       success: function(data) {
         console.log(data);
