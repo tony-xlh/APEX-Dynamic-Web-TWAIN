@@ -11,7 +11,7 @@ app = Flask(__name__, static_url_path='/', static_folder='./')
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route('/UploadFile', methods=['POST'])
+@app.route('/UploadFile', methods=['POST','GET'])
 @cross_origin()
 def upload_file():
     if request.method == 'POST':
@@ -23,6 +23,8 @@ def upload_file():
         f.save(os.path.join(path,filename))
         response={"status": "success", "filename": filename}
         return json.dumps(response)
+    else:
+        return ""
 
 #for base64
 @app.route('/Upload', methods=['POST'])
