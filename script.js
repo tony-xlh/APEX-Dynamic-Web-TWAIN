@@ -216,33 +216,34 @@ let DWTExtension = {
     );
   },
   upload: function(base64) {
-    let obj = {'base64':base64};
     let url;
     if (this.url) {
       url = this.url;
     }else{
       url = 'https://192.168.8.65:8888/Upload';
     }
-    $.ajax({
-      url: url,
-      type: 'POST',
-      data: JSON.stringify(obj),
-      contentType: 'application/json;charset=UTF-8',
-      dataType: 'text',
-      cache: false,
-      success: function(data) {
-        const response = JSON.parse(data);
-        if (response["status"] === "success") {
-          DWTExtension.img.setAttribute("data-filename",response["filename"]);
-          //DWTExtension.img.src = "https://192.168.8.65:8888/Get?filename="+encodeURIComponent(response["filename"]);
-          DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
-          alert("uploaded");
+    let xhr = new XMLHttpRequest();
+    let pay_load = {};
+    pay_load["base64"] = base64;
+    xhr.open('POST', url);
+    xhr.setRequestHeader('content-type', 'application/json'); 
+    xhr.onreadystatechange = function(){
+      if(xhr.readyState === 4){
+        if (xhr.status==200){
+          const response = JSON.parse(xhr.responseText);
+          if (response["status"] === "success") {
+            DWTExtension.img.setAttribute("data-filename",response["filename"]);
+            //DWTExtension.img.src = "https://192.168.8.65:8888/Get?filename="+encodeURIComponent(response["filename"]);
+            DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
+            alert("uploaded");
+          }
+        }else{
+          console.log(xhr);
+          alert("error");
         }
-      },
-      error: function() {
-        alert("error");
       }
-    });
+    }
+    xhr.send(JSON.stringify(pay_load));
   },
   getBase64: function(){
     if (this.img) {
