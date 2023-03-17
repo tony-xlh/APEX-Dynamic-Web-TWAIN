@@ -16,7 +16,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def upload_file():
     if request.method == 'POST':
         data = request.get_json()
-        print(data)
         if 'base64' in data:
             path = './uploaded/'
             if os.path.exists(path)==False:

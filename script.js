@@ -195,8 +195,8 @@ let DWTExtension = {
     let success = function (result, indices, type) {
       console.log("success");
       const base64 = result.getData(0, result.getLength());
+      //DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
       DWTExtension.upload(base64);
-      DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
     };
 
     let error = function (errorCode, errorString) {
@@ -215,21 +215,24 @@ let DWTExtension = {
     );
   },
   upload: function(base64) {
-    let data = {'base64':base64};
-    console.log(data);
+    let obj = {'base64':base64};
     $.ajax({
       url: 'https://192.168.8.65:8888/Upload',
       type: 'POST',
-      data: JSON.stringify(data),
+      data: JSON.stringify(obj),
       contentType: 'application/json;charset=UTF-8',
       dataType: 'text',
       cache: false,
       success: function(data) {
-        console.log(data);
-        alert("uploaded");
+        const response = JSON.parse(data);
+        if (response["status"] === "success") {
+          DWTExtension.img.setAttribute("data-filename",response["filename"]);
+          DWTExtension.img.src = "https://192.168.8.65:8888/Get?filename="+encodeURIComponent(response["filename"]);
+          alert("uploaded");
+        }
       },
       error: function() {
-        console.log("error");
+        alert("error");
       }
     });
   },
