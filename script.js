@@ -5,10 +5,12 @@ let DWTExtension = {
   img:undefined,
   width:undefined,
   height:undefined,
+  url:undefined,
   init: function(pConfig){
     this.regionID = pConfig.regionID;
     this.width = pConfig.width;
     this.height = pConfig.height;
+    this.url = pConfig.url;
     if ('apex' in window) {
       apex.region.create(
         pConfig.regionID,
@@ -195,7 +197,6 @@ let DWTExtension = {
     let success = function (result, indices, type) {
       console.log("success");
       const base64 = result.getData(0, result.getLength());
-      //DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
       DWTExtension.upload(base64);
     };
 
@@ -216,8 +217,14 @@ let DWTExtension = {
   },
   upload: function(base64) {
     let obj = {'base64':base64};
+    let url;
+    if (this.url) {
+      url = this.url;
+    }else{
+      url = 'https://192.168.8.65:8888/Upload';
+    }
     $.ajax({
-      url: 'https://192.168.8.65:8888/Upload',
+      url: url,
       type: 'POST',
       data: JSON.stringify(obj),
       contentType: 'application/json;charset=UTF-8',
@@ -227,7 +234,8 @@ let DWTExtension = {
         const response = JSON.parse(data);
         if (response["status"] === "success") {
           DWTExtension.img.setAttribute("data-filename",response["filename"]);
-          DWTExtension.img.src = "https://192.168.8.65:8888/Get?filename="+encodeURIComponent(response["filename"]);
+          //DWTExtension.img.src = "https://192.168.8.65:8888/Get?filename="+encodeURIComponent(response["filename"]);
+          DWTExtension.img.src = "data:image/jpeg;base64,"+base64;
           alert("uploaded");
         }
       },
