@@ -11,10 +11,23 @@ app = Flask(__name__, static_url_path='/', static_folder='./')
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-
-@app.route('/Upload', methods=['POST'])
+@app.route('/UploadFile', methods=['POST'])
 @cross_origin()
 def upload_file():
+    if request.method == 'POST':
+        f = request.files['RemoteFile']
+        path = './uploaded/'
+        if os.path.exists(path)==False:
+            os.makedirs(path)
+        filename = str(int(time.time()*1000))+'.jpg'
+        f.save(os.path.join(path,filename))
+        response={"status": "success", "filename": filename}
+        return json.dumps(response)
+
+#for base64
+@app.route('/Upload', methods=['POST'])
+@cross_origin()
+def upload():
     if request.method == 'POST':
         data = request.get_json()
         if 'base64' in data:
