@@ -12,3 +12,5 @@ apex.region("region_id").hideModal(); => hide the document scanner,
 apex.region("region_id").getBase64(); => get the base64 of the scanned document,
 apex.region("region_id").getFilename(); => get the filename of the uploaded document. The file is uploaded to a remote server if the host and port are specified.
 ```
+
+[Online demo](https://apex.oracle.com/pls/apex/r/dynamsoft/dynamsoft-demos/document-scanner)
