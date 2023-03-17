@@ -1,14 +1,20 @@
 from flask import Flask, request, send_file
+from flask_cors import CORS, cross_origin
 from PIL import Image
 import base64
 from io import BytesIO
 import base64
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/', static_folder='./')
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 @app.route('/Upload', methods=['POST'])
+@cross_origin()
 def upload_file():
     if request.method == 'POST':
         data = request.get_json()
+        print(data)
         if 'base64' in data:
             path = './uploaded/'
             if os.path.exists(path)==False:
