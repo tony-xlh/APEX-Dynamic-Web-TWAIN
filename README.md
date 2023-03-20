@@ -26,5 +26,5 @@ Attributes:
 You can apply for a trial license [here](https://www.dynamsoft.com/customer/license/trialLicense?product=dwt).
 
 
-
+Check out the blog for details: [How to Scan Documents in an Oracle APEX Application](https://www.dynamsoft.com/codepool/oracle-apex-document-scanning.html)
 
