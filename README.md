@@ -2,6 +2,8 @@
 
 APEX Plug-in to scan documents using [Dynamic Web TWAIN](https://www.dynamsoft.com/web-twain/overview/).
 
+You can install the plugin using `region_type_plugin_com_dynamsoft_dwt.sql`.
+
 It can display a modal to scan documents and display the selected scanned document in an image element.
 
 The following events are supported:
