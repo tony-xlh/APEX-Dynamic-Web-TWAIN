@@ -28,7 +28,7 @@ prompt APPLICATION 36447 - Dynamsoft Demos
 -- Application Export:
 --   Application:     36447
 --   Name:            Dynamsoft Demos
---   Date and Time:   09:12 Friday March 17, 2023
+--   Date and Time:   07:43 Monday March 20, 2023
 --   Exported By:     TONY@DYNAMSOFT.COM
 --   Flashback:       0
 --   Export Type:     Component Export
@@ -86,7 +86,7 @@ wwv_flow_imp_shared.create_plugin(
 '<li>apex.region("region_id").getBase64(); => get the base64 of the scanned document</li>',
 '<li>apex.region("region_id").getFilename(); => get the filename of the uploaded document. The file is uploaded to a remote server if the host and port are specified.</li>',
 '</ul>'))
-,p_version_identifier=>'1.0'
+,p_version_identifier=>'1.1'
 ,p_files_version=>65
 );
 wwv_flow_imp_shared.create_plugin_attribute(

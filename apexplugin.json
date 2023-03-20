@@ -1,6 +1,6 @@
 {
   "name": "Document Scanner",
-  "version": "1.0",
+  "version": "1.1",
   "description": "This Region Plug-in is used to scan documents using Dynamic Web TWAIN",
   "keywords": ["oracle", "apex", "plugin", "dynamsoft", "twain", "sane", "document", "scan"],
   "homepage": "https://github.com/tony-xlh/APEX-Dynamic-Web-TWAIN/",
