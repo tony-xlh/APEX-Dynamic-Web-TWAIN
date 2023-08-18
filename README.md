@@ -28,5 +28,14 @@ Attributes:
 You can apply for a trial license [here](https://www.dynamsoft.com/customer/license/trialLicense?product=dwt).
 
 
+## Blog
+
 Check out the blog for details: [How to Scan Documents in an Oracle APEX Application](https://www.dynamsoft.com/codepool/oracle-apex-document-scanning.html)
+
+## Notes about Storing the Scanned Documents
+
+1. You can upload the documents to a remote HTTP server by setting up the host and port. You can find the details in the blog.
+2. You can get the base64 of the documents and then insert it into the Oracle Database.
+
+
 
