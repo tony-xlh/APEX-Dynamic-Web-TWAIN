@@ -35,13 +35,14 @@ let DWTExtension = {
     }
   },
   load: async function(pConfig){
-    await this.loadLibrary("https://unpkg.com/dwt@18.0.0/dist/dynamsoft.webtwain.min.js","text/javascript");
+    await this.loadLibrary("https://cdn.jsdelivr.net/npm/dwt@18.5.0/dist/dynamsoft.webtwain.min.js","text/javascript");
     await this.loadStyle("https://tony-xlh.github.io/APEX-Dynamic-Web-TWAIN/style.css");
     if (pConfig.license) {
       Dynamsoft.DWT.ProductKey = pConfig.license;
     }
     Dynamsoft.DWT.AutoLoad = false;
-    Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@18.0.0/dist";
+    Dynamsoft.DWT.ServiceInstallerLocation = "https://demo.dynamsoft.com/DWT/Resources/dist/";
+    Dynamsoft.DWT.ResourcesPath = "https://cdn.jsdelivr.net/npm/dwt@18.5.0/dist";
   },
   addButton: function (){
     const button = document.createElement("div");
@@ -137,18 +138,14 @@ let DWTExtension = {
   },
   scan: function(){
     if (this.DWObject) {
-      if (Dynamsoft.Lib.env.bMobile) {
-        this.DWObject.Addon.Camera.scanDocument();
-      }else {
-        this.DWObject.SelectSource(function () {
-          DWTExtension.DWObject.OpenSource();
-          DWTExtension.DWObject.AcquireImage();
-        },
-          function () {
-            console.log("SelectSource failed!");
-          }
-        );
-      }
+      this.DWObject.SelectSource(function () {
+        DWTExtension.DWObject.OpenSource();
+        DWTExtension.DWObject.AcquireImage();
+      },
+        function () {
+          console.log("SelectSource failed!");
+        }
+      );
     }
   },
   edit: function(){
@@ -159,31 +156,9 @@ let DWTExtension = {
   },
   copy: function(){
     if (this.DWObject) {
-      if (Dynamsoft.Lib.env.bMobile) {
-        this.DWObject.ConvertToBlob(
-          [this.DWObject.CurrentImageIndexInBuffer],
-          Dynamsoft.DWT.EnumDWT_ImageType.IT_PNG,
-          function(result) {
-            DWTExtension.CopyBlobToClipboard(result);
-          },
-          function(errorCode,errorString) {
-            console.log("convert failed");
-            console.log(errorString);
-            alert("Failed");
-          });
-      }else{
-        this.DWObject.CopyToClipboard(this.DWObject.CurrentImageIndexInBuffer);
-        alert("Copied");
-      }
-    }
-  },
-  CopyBlobToClipboard: function(blob){
-    var data = [new ClipboardItem({ "image/png": blob})];
-    navigator.clipboard.write(data).then(function() {
+      this.DWObject.CopyToClipboard(this.DWObject.CurrentImageIndexInBuffer);
       alert("Copied");
-    }, function() {
-      alert("Failed");
-    });
+    }
   },
   useImage: function() {
     if (!this.img) {
