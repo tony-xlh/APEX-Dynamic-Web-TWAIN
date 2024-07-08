@@ -112,6 +112,44 @@ let DWTExtension = {
       saveBtn.addEventListener("click", () => {
         this.save();
       });
+
+      const saveToAPEXBtn = document.createElement("button");
+      saveToAPEXBtn.innerText = "Save PDF to APEX";
+      saveToAPEXBtn.addEventListener("click", () => {
+        let success = function (result, indices, type) {
+          const upload = async () => {
+            let timestamp = new Date().getTime().toString();
+            let filename = timestamp+".pdf";
+            const headers = new Headers();
+            headers.append("Content-Type", "application/pdf");
+  
+            const requestOptions = {
+              method: "POST",
+              headers: headers,
+              body: result,
+              redirect: "follow"
+            };
+            
+            const response = await fetch("https://apex.oracle.com/pls/apex/dynamsoft/pdf/api?FILENAME="+filename, requestOptions)
+            if (response.status == 201) {
+              alert("Saved");
+            }
+          }
+          console.log("success");
+          upload();
+        };
+    
+        let error = function (errorCode, errorString) {
+          console.log(errorString);
+        };
+          
+        this.DWObject.ConvertToBlob(
+          this.DWObject.SelectAllImages(),
+          Dynamsoft.DWT.EnumDWT_ImageType.IT_PNG,
+          success,
+          error
+        );
+      });
   
       const status = document.createElement("div");
       status.className="dwt-status";
@@ -121,6 +159,7 @@ let DWTExtension = {
       controls.appendChild(copyBtn);
       controls.appendChild(useBtn);
       controls.appendChild(saveBtn);
+      controls.appendChild(saveToAPEXBtn);
       controls.appendChild(status);
   
       body.appendChild(viewer);
