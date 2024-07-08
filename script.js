@@ -145,7 +145,7 @@ let DWTExtension = {
           
         this.DWObject.ConvertToBlob(
           this.DWObject.SelectAllImages(),
-          Dynamsoft.DWT.EnumDWT_ImageType.IT_PNG,
+          Dynamsoft.DWT.EnumDWT_ImageType.IT_PDF,
           success,
           error
         );
