@@ -157,14 +157,16 @@ let DWTExtension = {
   },
   scan: function(){
     if (this.DWObject) {
-      this.DWObject.SelectSource(function () {
-        DWTExtension.DWObject.OpenSource();
-        DWTExtension.DWObject.AcquireImage();
-      },
-        function () {
-          console.log("SelectSource failed!");
-        }
-      );
+      let pThis = this;
+      this.DWObject.SelectSourceAsync()
+          .then(function () {
+              return pThis.DWObject.AcquireImageAsync({
+                  IfCloseSourceAfterAcquire: true,
+              });
+          })
+          .catch(function (exp) {
+              alert(exp.message);
+          });
     }
   },
   edit: function(){
