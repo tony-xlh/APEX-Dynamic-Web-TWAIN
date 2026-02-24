@@ -34,8 +34,15 @@ Check out the blog for details: [How to Scan Documents in an Oracle APEX Applica
 
 ## Notes about Storing the Scanned Documents
 
-1. You can upload the documents to a remote HTTP server by setting up the host and port. You can find the details in the blog.
+1. You can upload the documents to a remote HTTP server by setting up the host and port. You can find the [details](https://www.dynamsoft.com/codepool/oracle-apex-document-scanning.html#directly-upload-files-to-oracle-apex:~:text=app%20as%20the-,backend%20HTTP%20server,-to%20receive%20and) in the blog.
 2. You can get the base64 of the documents and then insert it into the Oracle Database.
+3. You can create REST API to upload the images to the database. You can find the [details](https://www.dynamsoft.com/codepool/oracle-apex-document-scanning.html#directly-upload-files-to-oracle-apex) in the blog.
+
+## Self-Hosting
+
+You can put the files of Web TWAIN on the [cdn](https://unpkg.com/dwt@latest/dist/) to static resources to host the files offline.
+
+
 
 
 
