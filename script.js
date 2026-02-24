@@ -35,14 +35,33 @@ let DWTExtension = {
     }
   },
   load: async function(pConfig){
-    await this.loadLibrary("https://cdn.jsdelivr.net/npm/dwt@18.5.0/dist/dynamsoft.webtwain.min.js","text/javascript");
-    await this.loadStyle("https://tony-xlh.github.io/APEX-Dynamic-Web-TWAIN/style.css");
+    let jsLoadedFromStaticResources = false;
+    try {
+        console.log("try loading from static resources: "+"https://oracleapex.com/ords/"+apex.env.APP_FILES+"dwt/dynamsoft.webtwain.min.js");
+        await this.loadLibrary("https://oracleapex.com/ords/"+apex.env.APP_FILES+"dwt/dynamsoft.webtwain.min.js","text/javascript");
+        jsLoadedFromStaticResources = true;
+    }catch (e) {
+        console.log("fallback to using cdn");
+        await this.loadLibrary("https://cdn.jsdelivr.net/npm/dwt@19.3.1/dist/dynamsoft.webtwain.min.js","text/javascript");
+    }
+     try {
+        console.log("try loading from static resources: "+"https://oracleapex.com/ords/"+apex.env.APP_FILES+"dwt/style.css");
+        await this.loadStyle("https://oracleapex.com/ords/"+apex.env.APP_FILES+"dwt/style.css");
+    }catch (e) {
+        console.log("fallback to using cdn");
+        await this.loadStyle("https://tony-xlh.github.io/APEX-Dynamic-Web-TWAIN/style.css");
+    }
     if (pConfig.license) {
       Dynamsoft.DWT.ProductKey = pConfig.license;
     }
     Dynamsoft.DWT.AutoLoad = false;
-    Dynamsoft.DWT.ServiceInstallerLocation = "https://demo.dynamsoft.com/DWT/Resources/dist/";
-    Dynamsoft.DWT.ResourcesPath = "https://cdn.jsdelivr.net/npm/dwt@18.5.0/dist";
+    if (jsLoadedFromStaticResources) {
+        Dynamsoft.DWT.ResourcesPath = "https://oracleapex.com/ords/"+apex.env.APP_FILES+"dwt";
+    }else{
+        Dynamsoft.DWT.ServiceInstallerLocation = "https://demo.dynamsoft.com/history/dwt19.3.1/Resources/dist";
+        Dynamsoft.DWT.ResourcesPath = "https://cdn.jsdelivr.net/npm/dwt@19.3.1/dist";
+    }
+
   },
   addButton: function (){
     const button = document.createElement("div");
@@ -112,44 +131,6 @@ let DWTExtension = {
       saveBtn.addEventListener("click", () => {
         this.save();
       });
-
-      const saveToAPEXBtn = document.createElement("button");
-      saveToAPEXBtn.innerText = "Save PDF to APEX";
-      saveToAPEXBtn.addEventListener("click", () => {
-        let success = function (result, indices, type) {
-          const upload = async () => {
-            let timestamp = new Date().getTime().toString();
-            let filename = timestamp+".pdf";
-            const headers = new Headers();
-            headers.append("Content-Type", "application/pdf");
-  
-            const requestOptions = {
-              method: "POST",
-              headers: headers,
-              body: result,
-              redirect: "follow"
-            };
-            
-            const response = await fetch("https://apex.oracle.com/pls/apex/dynamsoft/pdf/api?FILENAME="+filename, requestOptions)
-            if (response.status == 201) {
-              alert("Saved");
-            }
-          }
-          console.log("success");
-          upload();
-        };
-    
-        let error = function (errorCode, errorString) {
-          console.log(errorString);
-        };
-          
-        this.DWObject.ConvertToBlob(
-          this.DWObject.SelectAllImages(),
-          Dynamsoft.DWT.EnumDWT_ImageType.IT_PDF,
-          success,
-          error
-        );
-      });
   
       const status = document.createElement("div");
       status.className="dwt-status";
@@ -159,7 +140,6 @@ let DWTExtension = {
       controls.appendChild(copyBtn);
       controls.appendChild(useBtn);
       controls.appendChild(saveBtn);
-      controls.appendChild(saveToAPEXBtn);
       controls.appendChild(status);
   
       body.appendChild(viewer);
